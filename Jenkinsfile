@@ -2,28 +2,21 @@ pipeline {
     agent any
 
     stages {
+        stage('Clone') {
+            steps {
+                git 'https://github.com/your-username/your-repo.git'
+            }
+        }
 
-        stage('Install Dependencies') {
+        stage('Install') {
             steps {
                 bat 'npm install'
             }
         }
 
-        stage('Build') {
-            steps {
-                bat 'npm run build'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                bat 'echo Running tests...'
-            }
-        }
-
         stage('Run') {
             steps {
-                bat 'start /B npm start'
+                bat 'npm start'
             }
         }
     }
