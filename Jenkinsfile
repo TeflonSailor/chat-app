@@ -26,5 +26,15 @@ pipeline {
                 bat 'start /B npm start'
             }
         }
+
+         stage('Verify App') {
+            steps {
+                bat '''
+                timeout /t 15
+                curl http://localhost:3000
+                IF %ERRORLEVEL% NEQ 0 EXIT /B 1
+                '''
+            }
+        }
     }
 }
