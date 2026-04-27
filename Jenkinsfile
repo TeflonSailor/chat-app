@@ -2,14 +2,15 @@ pipeline {
     agent any
 
     stages {
-        
-        stage('Install') {
+        stage('Install Backend') {
             steps {
-                bat 'npm install'
+                dir('backend') {
+                    bat 'npm install'
+                }
             }
         }
 
-        stage('Run') {
+        stage('Run App') {
             steps {
                 bat 'npm start'
             }
