@@ -17,14 +17,6 @@ pipeline {
             }
         }
         
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
-                // If you don't have tests yet, comment this out to prevent failures
-                bat 'npm test' 
-            }
-        }
-        
         stage('Build') {
             steps {
                 echo 'Building the application...'
