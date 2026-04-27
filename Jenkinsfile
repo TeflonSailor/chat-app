@@ -1,48 +1,45 @@
 pipeline {
-    agent any // Runs on your Windows Jenkins agent
+
+    agent any
+
+    tools {
+        maven 'Maven'
+        jdk 'Java'
+    }
 
     stages {
-        stage('Checkout') {
+
+        stage('Clone') {
             steps {
-                // Pulls the code from your GitHub repository
-                git branch: 'main', url: 'https://github.com/TeflonSailor/chat-app.git'
+                git 'https://github.com/TeflonSailor/chat-app.git'
             }
         }
-        
-        stage('Install Dependencies') {
+
+        stage('Install frontend') {
             steps {
-                echo 'Installing dependencies...'
-                // Using 'bat' instead of 'sh' for Windows
-                bat 'npm install'
+                bat '''
+                cd client
+                npm install
+                npm start &
+                sleep 20
+                '''
             }
         }
-        
-        stage('Build') {
+
+        stage('Run Selenium Tests') {
             steps {
-                echo 'Building the application...'
-                bat 'npm run build'
+                bat 'mvn clean test'
             }
         }
-        
-        stage('Deploy') {
-            steps {
-                echo 'Deploying the chat-app...'
-                // Example: Copying built files to an IIS server directory
-                // bat 'xcopy /E /I /Y build\\* C:\\inetpub\\wwwroot\\chat-app'
-            }
-        }
+
     }
-    
+
     post {
-        success {
-            echo '🎉 Pipeline completed successfully!'
-        }
-        failure {
-            echo '❌ Pipeline failed. Please check the logs.'
-        }
+
         always {
-            echo 'Cleaning up workspace...'
-            cleanWs()
+            junit 'target/surefire-reports/*.xml'
         }
+
     }
+
 }
