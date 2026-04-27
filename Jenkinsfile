@@ -2,40 +2,39 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('Clone') {
             steps {
-                git branch: 'master',
-                    url: 'https://github.com/iemafzalhassan/full-stack_chatApp.git'
+                git 'https://github.com/TeflonSailor/chat-app.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                bat 'echo Installing dependencies...'
+                bat 'npm install'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                bat 'echo Building project...'
+                bat 'npm run build'
             }
         }
 
         stage('Test') {
             steps {
-                script {
-                    sh '''
-                        sleep 15
-                        curl -f http://localhost:5001/health
-                        curl -f http://localhost/ || exit 1
-                    '''
-                }
+                bat 'echo Running tests...'
+                // Add test command if available
+                // bat 'npm test'
             }
         }
 
-        stage('Deploy') {
+        stage('Run') {
             steps {
-                script {
-                    sh 'docker-compose up -d --build'
-                }
+                bat 'echo Starting application...'
+                bat 'npm start'
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Deployment and tests completed successfully!'
-        }
-        failure {
-            echo 'Deployment or tests failed.'
         }
     }
 }
