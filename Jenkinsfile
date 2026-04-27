@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        MONGODB_URI = 'mongodb://localhost:27017/chatapp'
+        MONGODB_URI = 'mongodb://localhost:27017/test'
         PORT = '5000'
     }
 
@@ -15,9 +15,9 @@ pipeline {
             }
         }
 
-        stage('Build Check') {
+        stage('Run App') {
             steps {
-                echo 'Build successful'
+                bat 'npm start'
             }
         }
     }
