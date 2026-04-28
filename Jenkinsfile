@@ -15,7 +15,7 @@ pipeline {
             }
         }
 
-        stage('Install frontend') {
+        stage('Install frontend for chat-app') {
             steps {
                 bat '''
                 cd client
